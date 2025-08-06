@@ -22,28 +22,39 @@ python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\act
 ```bash
 pip install -r requirements.txt
 ```
+#### 2·3  Create the PostgreSQL database (once)
+```bash
+# as postgres superuser
+psql -U postgres
+CREATE DATABASE cricket_stats;
+CREATE USER <user_name> WITH PASSWORD <pwd>;
 
-### 2·3  Set environment variables
+```
+
+
+### 2·4  Set environment variables
 
 Create a file called **.env** in the project root:
-
+> The MCP server uses the `PG_DSN` string to connect at runtime.
+> 
 ```env
 # Postgres – use ANY user with SELECT rights; read‑only is safer and update password
 PG_DSN=postgresql+psycopg://<user>:<pwd>@127.0.0.1:5432/cricket_stats
 
-# Choose ONE provider ↓
+# Choose ONE
 OPENAI_API_KEY=sk‑…            # OR
 # ANTHROPIC_API_KEY=sk‑ant‑…
 ```
 
-### 2·4  Load the sample cricket data
+
+### 2·5  Load the sample cricket data
 
 ```bash
 psql -U admin -d cricket_stats -f extras/create_schema.sql   # to create schema
 python extras/load_data.py     # to populate data
 ```
 
-### 2·5  Run the MCP server (local dev)
+### 2·6  Run the MCP server (local dev)
 
 ```bash
 python cricket_mcp.py               # uses STDIO transport by default
