@@ -1,19 +1,4 @@
-# virtual-envs
 db-mcp-venv/
 .venv/
-env/
-venv/
-
-# Python artefacts
+.env
 __pycache__/
-*.py[cod]
-
-# IDE / OS clutter
-.vscode/
-.DS_Store
-
-# secrets
-.env
-.env
-*.dylib
-.env
