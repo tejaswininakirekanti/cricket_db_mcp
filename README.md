@@ -2,7 +2,7 @@
 This repo contains the steps to configure MCP based Claude Desktop to get insights on cricket data stored in postgres db with natural language queries. Follow the below instructions
 
 ### 1  Prerequisites
-- Python (3.10 or newer recommended)
+- Python 
 - PostgreSQL (local or remote instance)
 - Claude Desktop installed
 - OpenAI / Anthropic API Key with active quota
