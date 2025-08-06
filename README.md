@@ -5,8 +5,8 @@ This repo contains the steps to configure MCP based Claude Desktop to get insigh
 - Python 
 - PostgreSQL (local or remote instance)
 - Claude Desktop installed
-- OpenAI / Anthropic API Key with active quota
-
+- OpenAI / Anthropic API Key
+  
 ### 2  Installation Steps
 
 ### 2·1  Clone & Create a virtual environment
