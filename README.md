@@ -46,15 +46,23 @@ OPENAI_API_KEY=sk‑…            # OR
 # ANTHROPIC_API_KEY=sk‑ant‑…
 ```
 
+### 2·5  Download the IPL match dataset (JSON)
 
-### 2·5  Load the sample cricket data
+```bash
+# From the project root
+mkdir -p extras/matches
+curl -L -o extras/ipl_json.zip https://cricsheet.org/downloads/ipl_json.zip
+unzip -q extras/ipl_json.zip -d extras/matches
+rm extras/ipl_json.zip           
+```
+### 2·6  Load the sample cricket data
 
 ```bash
 psql -U admin -d cricket_stats -f extras/create_schema.sql   # to create schema
 python extras/load_data.py     # to populate data
 ```
 
-### 2·6  Run the MCP server (local dev)
+### 2·7  Run the MCP server (local dev)
 
 ```bash
 python cricket_mcp.py               # uses STDIO transport by default
