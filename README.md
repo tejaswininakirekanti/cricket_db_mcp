@@ -40,7 +40,7 @@ OPENAI_API_KEY=sk‑…            # OR
 
 ```bash
 psql -U admin -d cricket_stats -f extras/create_schema.sql   # to create schema
-psql -U admin -d cricket_stats -f extras/load_sample.sql     # to populate data
+python extras/load_data.py     # to populate data
 ```
 
 ### 2·5  Run the MCP server (local dev)
