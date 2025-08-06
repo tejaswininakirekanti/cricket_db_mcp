@@ -7,8 +7,8 @@ from langchain_community.utilities import SQLDatabase
 from langchain_experimental.sql import SQLDatabaseChain
 from fastmcp import FastMCP
 
-# ── load env vars ─────────────────────────────────────────────────────────
 load_dotenv()
+
 PG_DSN = os.environ["PG_DSN"]
 
 def build_llm():
@@ -24,7 +24,6 @@ sql_chain = SQLDatabaseChain.from_llm(
     llm, db, verbose=False, return_intermediate_steps=True
 )
 
-# ── helper to pull SQL out of intermediate_steps ──────────────────────────
 SQLQ_RE = re.compile(r"SQLQuery:\s*(.+)", re.I | re.S)
 def extract_sql(steps: list) -> str:
     for step in steps:
@@ -44,36 +43,29 @@ def extract_sql(steps: list) -> str:
                 return m.group(1).strip()
     raise ValueError("No SQLQuery found")
 
-# ── DB runner ─────────────────────────────────────────────────────────────
 def run_sql(sql: str) -> pd.DataFrame:
     eng = create_engine(PG_DSN, pool_pre_ping=True)
     with eng.begin() as conn:
         return pd.read_sql(text(sql), conn)
 
-# ── MCP server & tool ─────────────────────────────────────────────────────
 mcp = FastMCP("cricket")
 
-# … existing imports / helpers stay as-is …
 
 @mcp.tool()
 async def ask_cricket(question: str) -> str:
     resp = sql_chain.invoke({"query": question})
     sql  = extract_sql(resp["intermediate_steps"])
 
-    # ── NEW: remove ```sql … ``` fences LangChain sometimes adds ──
     sql = sql.strip()
     if sql.startswith("```"):
         sql = sql.split("\n", 1)[1]          # drop the first ```sql line
     if sql.endswith("```"):
         sql = sql.rsplit("\n", 1)[0]         # drop the trailing ``` fence
-    # ────────────────────────────────────────────────────────────────
-
     df = run_sql(sql)
     if len(df) > 300:
         df = df.head(300)
 
     return f"**SQL**\n```sql\n{sql}\n```\n\n" + df.to_markdown(index=False)
-
 
 if __name__ == "__main__":
     mcp.run(transport="stdio")                              # for Claude Desktop
